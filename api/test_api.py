@@ -1,27 +1,39 @@
 import requests
 
-BASE_URL = "https://fakestoreapi.com"
+BASE_URL = "https://api.github.com"
+REPOSITORY = "octocat/Hello-World"
 TIMEOUT_SECONDS = 10
+HEADERS = {
+    "Accept": "application/vnd.github+json",
+    "User-Agent": "qa-sdet-portfolio-tests",
+}
 
 
-def test_get_products_returns_non_empty_collection():
-    response = requests.get(f"{BASE_URL}/products", timeout=TIMEOUT_SECONDS)
+def get_repository():
+    return requests.get(
+        f"{BASE_URL}/repos/{REPOSITORY}",
+        headers=HEADERS,
+        timeout=TIMEOUT_SECONDS,
+    )
+
+
+def test_get_repository_returns_successful_response():
+    response = get_repository()
 
     assert response.status_code == 200
-
-    products = response.json()
-    assert isinstance(products, list)
-    assert products, "Expected at least one product"
+    assert response.headers["content-type"].startswith("application/json")
 
 
-def test_each_product_contains_required_fields():
-    response = requests.get(f"{BASE_URL}/products", timeout=TIMEOUT_SECONDS)
+def test_repository_response_matches_expected_schema():
+    response = get_repository()
     response.raise_for_status()
 
-    required_fields = {"id", "title", "price", "category", "image"}
+    repository = response.json()
+    required_fields = {"id", "name", "full_name", "private", "html_url"}
 
-    for product in response.json():
-        assert required_fields.issubset(product)
-        assert isinstance(product["id"], int)
-        assert isinstance(product["title"], str) and product["title"]
-        assert product["price"] >= 0
+    assert required_fields.issubset(repository)
+    assert isinstance(repository["id"], int)
+    assert repository["name"] == "Hello-World"
+    assert repository["full_name"] == REPOSITORY
+    assert repository["private"] is False
+    assert repository["html_url"].startswith("https://github.com/")
