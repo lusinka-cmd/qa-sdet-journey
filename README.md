@@ -56,7 +56,7 @@ UI tests run headlessly by default for reliable local and CI execution.
 
 - Login validation: parameterized accepted and rejected credentials
 - SauceDemo UI: successful login, inventory verification, and invalid-login error handling
-- Fake Store API: response status, collection structure, and product schema checks
+- GitHub REST API: response status, headers, repository schema, and data type checks
 
 ## CI
 
