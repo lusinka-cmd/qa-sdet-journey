@@ -1,14 +1,25 @@
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+import pytest
 
 from login_check import login
-from login_check import login
 
-def test_login_success():
-    result = login("admin", "1234")
-    assert result == "Login successful"
-def test_login_wrong_password():
-    result = login("admin", "wrong")
-    assert result == "Login failed"
+
+@pytest.mark.parametrize(
+    ("username", "password"),
+    [
+        ("admin", "1234"),
+    ],
+)
+def test_login_accepts_valid_credentials(username, password):
+    assert login(username, password) is True
+
+
+@pytest.mark.parametrize(
+    ("username", "password"),
+    [
+        ("admin", "wrong-password"),
+        ("unknown-user", "1234"),
+        ("", ""),
+    ],
+)
+def test_login_rejects_invalid_credentials(username, password):
+    assert login(username, password) is False

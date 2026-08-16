@@ -1,5 +1,3 @@
-def login(user, password):
-    if user == "admin" and password == "1234":
-        return "Login successful"
-    else:
-        return "Login failed"
+def login(username: str, password: str) -> bool:
+    """Return whether the supplied credentials match the expected test user."""
+    return username == "admin" and password == "1234"

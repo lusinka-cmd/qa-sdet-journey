@@ -1,16 +1,23 @@
-import sys
-import os
+import pytest
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from pages.saucedemo_page import SauceDemoLoginPage
 
-from pages.google_page import GooglePage
 
-def test_google_search(page):
-    google = GooglePage(page)
+@pytest.mark.ui
+def test_valid_user_can_open_inventory(page):
+    login_page = SauceDemoLoginPage(page)
 
-    google.open()
-    google.search("Playwright")
+    login_page.open()
+    login_page.login("standard_user", "secret_sauce")
 
-    page.wait_for_timeout(3000)
+    login_page.verify_inventory_is_displayed()
 
-    assert "Playwright" in google.get_title()
+
+@pytest.mark.ui
+def test_invalid_user_sees_login_error(page):
+    login_page = SauceDemoLoginPage(page)
+
+    login_page.open()
+    login_page.login("invalid_user", "wrong_password")
+
+    login_page.verify_login_error()
