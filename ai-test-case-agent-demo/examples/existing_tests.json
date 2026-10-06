@@ -1,0 +1,17 @@
+[
+  {
+    "id": "TC-01",
+    "title": "Login with valid credentials",
+    "checks": ["User submits valid username and password", "Products page is displayed"]
+  },
+  {
+    "id": "TC-02",
+    "title": "Reject invalid credentials",
+    "checks": ["User submits invalid password", "Login error is displayed"]
+  },
+  {
+    "id": "TC-03",
+    "title": "Invalid password shows login error",
+    "checks": ["User submits incorrect password", "Login error is displayed"]
+  }
+]
